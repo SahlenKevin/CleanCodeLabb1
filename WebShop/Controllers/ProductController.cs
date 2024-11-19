@@ -17,7 +17,9 @@ namespace WebShop.Controllers
         public ActionResult<IEnumerable<Product>> GetProducts()
         {
             // Beh�ver anv�nda repository via Unit of Work f�r att h�mta produkter
-            return Ok("Hejsan");
+            var products = _unitOfWork.Products.GetAll();
+            
+            return Ok(products);
         }
 
         // Endpoint f�r att l�gga till en ny produkt

@@ -20,13 +20,34 @@ public class ProductControllerTests
     public void GetProducts_ReturnsOkResult_WithAListOfProducts()
     {
         // Arrange
-        List<Product> products = (List<Product>)A.CollectionOfDummy<Product>(1);
+        var expectedProducts = new List<Product>
+        {
+            new Product
+            {
+                Id = 1,
+                Name = "TestProdukt"
+            },
+            new Product
+            {
+                Id = 2,
+                Name = "EnTillTestProdukt"
+            },
+        };
+
+        A.CallTo(() => _unitOfWork.Products.GetAll()).Returns(expectedProducts);
         
         // Act
         var result = _controller.GetProducts();
         
-        // Assert
+        // Assert 
+        var actionResult = Assert.IsType<ActionResult<IEnumerable<Product>>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        Assert.Equal(200, okResult.StatusCode);
         
+        var returnedProducts = Assert.IsAssignableFrom<IEnumerable<Product>>(okResult.Value); 
+        Assert.Equivalent(expectedProducts, returnedProducts);
+        
+        A.CallTo(() => _unitOfWork.Products.GetAll()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]

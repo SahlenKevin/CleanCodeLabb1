@@ -6,15 +6,15 @@ namespace WebShop.Repositories;
 public class ProductRepository : IProductRepository
 {
     private readonly WebShopDbContext _context;
-    private readonly DbSet<Product> _dbSet;
-    public ProductRepository(WebShopDbContext context, DbSet<Product> dbSet)
+    // private readonly DbSet<Product> _dbSet;
+    public ProductRepository(WebShopDbContext context)
     {
         _context = context;
-        _dbSet = dbSet;
+        // _dbSet = dbSet;
     }
     public IEnumerable<Product> GetAll()
     {
-        throw new NotImplementedException();
+        return _context.Products.ToList();
     }
 
     public void Add(Product product)

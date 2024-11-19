@@ -9,18 +9,12 @@ namespace WebShop.UnitOfWork
     {
         // Hämta produkter från repository
         private readonly WebShopDbContext _context;
-        private readonly DbSet<Product> _dbSet;
         public IProductRepository Products { get; set; }
         
         public UnitOfWork(WebShopDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            Products = new ProductRepository(_context, _dbSet);
-        }
-
-        public Task<IProductRepository> GetProductsAsync()
-        {
-            throw new NotImplementedException();
+            Products = new ProductRepository(_context);
         }
 
         public int Complete()
