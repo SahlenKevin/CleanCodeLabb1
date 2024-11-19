@@ -12,16 +12,37 @@ public class ProductRepository : IProductRepository
         _context = context;
         // _dbSet = dbSet;
     }
-    public IEnumerable<Product> GetAll()
+
+    public async Task<Product> GetByIdAsync(int id)
     {
-        return _context.Products.ToList();
+        var product = await _context.Products.FindAsync(id);
+        if (product is null)
+        {
+            return null;
+        }
+        return product;
     }
 
-    public void Add(Product product)
+    public async Task<IEnumerable<Product>> GetAllAsync()
+    {
+        return await _context.Products.ToListAsync();
+    }
+
+    public async Task AddAsync(Product product)
     {
         if (product == null)
             throw new ArgumentNullException(nameof(product));
 
         _context.Add(product);
+    }
+
+    public Task UpdateAsync(Product item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveAsync(int id)
+    {
+        throw new NotImplementedException();
     }
 }

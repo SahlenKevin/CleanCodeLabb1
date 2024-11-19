@@ -7,7 +7,7 @@ namespace WebShop.UnitOfWork
     {
          // Repository för produkter
          IProductRepository Products { get; }
-         int Complete();
+         Task<int> CompleteAsync();
          // Sparar förändringar (om du använder en databas)
          // Task SaveChangesAsync();
         void NotifyProductAdded(Product product); // Notifierar observatörer om ny produkt

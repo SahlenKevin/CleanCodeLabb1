@@ -17,14 +17,9 @@ namespace WebShop.UnitOfWork
             Products = new ProductRepository(_context);
         }
 
-        public int Complete()
+        public async Task<int> CompleteAsync()
         {
-            return _context.SaveChanges();
-        }
-
-        public Task SaveChangesAsync()
-        {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
 
         public void NotifyProductAdded(Product product)

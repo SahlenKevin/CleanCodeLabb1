@@ -12,12 +12,13 @@ namespace WebShop.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        
         // Endpoint f�r att h�mta alla produkter
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             // Beh�ver anv�nda repository via Unit of Work f�r att h�mta produkter
-            var products = _unitOfWork.Products.GetAll();
+            var products = await _unitOfWork.Products.GetAllAsync();
             
             return Ok(products);
         }
@@ -31,12 +32,26 @@ namespace WebShop.Controllers
 
             try
             {
-                _unitOfWork.Products.Add(product);
+                _unitOfWork.Products.AddAsync(product);
 
                 // Save changes
-                _unitOfWork.Complete();
+                _unitOfWork.CompleteAsync();
 
                 return Ok("Product added successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<Product>> GetProductByIdAsync(int productId)
+        {
+            try
+            {
+                var product = await _unitOfWork.Products.GetByIdAsync(productId);
+                return Ok(product);
             }
             catch (Exception ex)
             {

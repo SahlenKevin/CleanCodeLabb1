@@ -17,7 +17,29 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public void GetProducts_ReturnsOkResult_WithAListOfProducts()
+    public async Task GetProduct_ReturnsOkResult_WithAProduct()
+    {
+        // Arrange
+        var expectedProduct = new Product { Id = 1, Name = "TestProdukt" };
+
+        A.CallTo(() => _unitOfWork.Products.GetByIdAsync(expectedProduct.Id)).Returns(expectedProduct);
+        // Act
+        var result = await _controller.GetProductByIdAsync(expectedProduct.Id);
+        
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<Product>>(result);
+        
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        Assert.Equal(200, okResult.StatusCode);
+        
+        var returnedProduct = Assert.IsAssignableFrom<Product>(okResult.Value);
+        Assert.Equivalent(expectedProduct, returnedProduct);
+
+        A.CallTo(() => _unitOfWork.Products.GetByIdAsync(expectedProduct.Id)).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task GetProducts_ReturnsOkResult_WithAListOfProducts()
     {
         // Arrange
         var expectedProducts = new List<Product>
@@ -34,20 +56,20 @@ public class ProductControllerTests
             },
         };
 
-        A.CallTo(() => _unitOfWork.Products.GetAll()).Returns(expectedProducts);
-        
+        A.CallTo(() => _unitOfWork.Products.GetAllAsync()).Returns(expectedProducts);
+
         // Act
-        var result = _controller.GetProducts();
-        
+        var result =  await _controller.GetProducts();
+
         // Assert 
         var actionResult = Assert.IsType<ActionResult<IEnumerable<Product>>>(result);
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(200, okResult.StatusCode);
-        
-        var returnedProducts = Assert.IsAssignableFrom<IEnumerable<Product>>(okResult.Value); 
+
+        var returnedProducts = Assert.IsAssignableFrom<IEnumerable<Product>>(okResult.Value);
         Assert.Equivalent(expectedProducts, returnedProducts);
-        
-        A.CallTo(() => _unitOfWork.Products.GetAll()).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => _unitOfWork.Products.GetAllAsync()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -55,14 +77,14 @@ public class ProductControllerTests
     {
         // Arrange
         var testProduct = A.Fake<Product>();
-        A.CallTo(() => _unitOfWork.Products.Add(testProduct)).DoesNothing();    
-        
+        A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).DoesNothing();
+
         // Act
         var result = _controller.AddProduct(testProduct);
-        
+
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
-        A.CallTo(() => _unitOfWork.Products.Add(testProduct)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).MustHaveHappenedOnceExactly();
     }
 }
