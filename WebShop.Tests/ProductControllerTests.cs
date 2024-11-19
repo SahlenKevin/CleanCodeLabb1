@@ -28,7 +28,6 @@ public class ProductControllerTests
         
         // Assert
         var actionResult = Assert.IsType<ActionResult<Product>>(result);
-        
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(200, okResult.StatusCode);
         
@@ -83,8 +82,24 @@ public class ProductControllerTests
         var result = _controller.AddProduct(testProduct);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result);
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
         Assert.Equal(200, okResult.StatusCode);
         A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public void AddProduct_ReturnsBadRequestResult()
+    {
+        // Arrange
+        Product testProduct = null;
+        A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).DoesNothing();
+
+        // Act
+        var result = _controller.AddProduct(testProduct);
+        
+        // Assert
+        var isBadRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(400, isBadRequestResult.StatusCode);
+        A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).MustNotHaveHappened();
     }
 }
