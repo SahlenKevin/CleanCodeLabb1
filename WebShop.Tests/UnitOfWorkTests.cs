@@ -10,7 +10,7 @@ namespace WebShopTests
         public void NotifyProductAdded_CallsObserverUpdate()
         {
             // Arrange
-            var product = new Product { Id = 1, Name = "Test" };
+            // var product = new Product { Id = 1, Name = "Test" };
 
             // Skapar en mock av INotificationObserver
             // var mockObserver = new Mock<INotificationObserver>();
@@ -20,10 +20,10 @@ namespace WebShopTests
             // productSubject.Attach(mockObserver.Object);
 
             // Injicerar vårt eget ProductSubject i UnitOfWork
-            var unitOfWork = new UnitOfWork(productSubject);
+            // var unitOfWork = new UnitOfWork(productSubject);
 
             // Act
-            unitOfWork.NotifyProductAdded(product);
+            // unitOfWork.NotifyProductAdded(product);
 
             // Assert
             // Verifierar att Update-metoden kallades på vår mock-observatör

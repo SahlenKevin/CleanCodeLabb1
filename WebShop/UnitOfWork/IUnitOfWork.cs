@@ -3,12 +3,13 @@
 namespace WebShop.UnitOfWork
 {
     // Gränssnitt för Unit of Work
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
          // Repository för produkter
-         Task<IProductRepository> GetProductsAsync();
+         IProductRepository Products { get; }
+         int Complete();
          // Sparar förändringar (om du använder en databas)
-         Task SaveChangesAsync();
+         // Task SaveChangesAsync();
         void NotifyProductAdded(Product product); // Notifierar observatörer om ny produkt
     }
 }

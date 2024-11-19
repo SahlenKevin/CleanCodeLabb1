@@ -5,10 +5,13 @@ namespace WebShop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController(IUnitOfWork unitOfWork) : ControllerBase
+    public class ProductController: ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
         // Endpoint f�r att h�mta alla produkter
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetProducts()
@@ -19,15 +22,24 @@ namespace WebShop.Controllers
 
         // Endpoint f�r att l�gga till en ny produkt
         [HttpPost]
-        public ActionResult AddProduct(Product product)
+        public IActionResult AddProduct([FromBody] Product product)
         {
-            // L�gger till produkten via repository
+            if (product == null)
+                return BadRequest("Product is null.");
 
-            // Sparar f�r�ndringar
+            try
+            {
+                _unitOfWork.Products.Add(product);
 
-            // Notifierar observat�rer om att en ny produkt har lagts till
+                // Save changes
+                _unitOfWork.Complete();
 
-            return Ok();
+                return Ok("Product added successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
