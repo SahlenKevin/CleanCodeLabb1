@@ -25,17 +25,17 @@ namespace WebShop.Controllers
 
         // Endpoint f�r att l�gga till en ny produkt
         [HttpPost]
-        public IActionResult AddProduct([FromBody] Product product)
+        public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
             if (product == null)
                 return BadRequest("Product is null.");
 
             try
             {
-                _unitOfWork.Products.AddAsync(product);
+               await _unitOfWork.Products.AddAsync(product);
 
                 // Save changes
-                _unitOfWork.CompleteAsync();
+               await _unitOfWork.CompleteAsync();
 
                 return Ok("Product added successfully.");
             }

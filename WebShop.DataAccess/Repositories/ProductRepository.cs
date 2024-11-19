@@ -33,7 +33,7 @@ public class ProductRepository : IProductRepository
         if (product == null)
             throw new ArgumentNullException(nameof(product));
 
-        _context.Add(product);
+        await _context.AddAsync(product);
     }
 
     public Task UpdateAsync(Product item)
