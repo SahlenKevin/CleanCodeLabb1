@@ -17,7 +17,28 @@ public class UserController: ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync()
     {
-        var user = new User { Id = 1, UserName = "Kevin" };
-        return Ok(user);
+        var users = await _unitOfWork.Users.GetAllAsync();
+        return Ok(users);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddUserAsync([FromBody] User user)
+    {
+        if (user == null)
+            return BadRequest("User is null.");
+
+        try
+        {
+            await _unitOfWork.Users.AddAsync(user);
+
+            // Save changes
+            await _unitOfWork.CompleteAsync();
+
+            return Ok("Product added successfully.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 }

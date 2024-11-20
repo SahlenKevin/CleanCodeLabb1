@@ -1,20 +1,30 @@
-﻿namespace WebShop.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using WebShop.Repository;
 
-public class UserRepository: IUserRepository
+namespace WebShop.Repositories;
+
+public class UserRepository : IUserRepository
 {
+    private readonly WebShopDbContext _context;
+
+    public UserRepository(WebShopDbContext context)
+    {
+        _context = context;
+    }
+
     public Task<User> GetByIdAsync(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<User>> GetAllAsync()
+    public async Task<IEnumerable<User>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Users.ToListAsync();
     }
 
-    public Task AddAsync(User item)
+    public async Task AddAsync(User user)
     {
-        throw new NotImplementedException();
+        await _context.Users.AddAsync(user);
     }
 
     public void Update(User item)

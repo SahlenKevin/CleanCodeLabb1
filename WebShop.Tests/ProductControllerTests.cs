@@ -4,6 +4,8 @@ using WebShop;
 using WebShop.Controllers;
 using WebShop.UnitOfWork;
 
+namespace WebShopTests;
+
 public class ProductControllerTests
 {
     private readonly ProductController _controller;
