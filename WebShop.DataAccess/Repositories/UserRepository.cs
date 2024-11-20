@@ -12,9 +12,15 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public Task<User> GetByIdAsync(int id)
+    public async Task<User> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+       var user = await _context.Users.FindAsync(id);
+      
+       if (user is null)
+       {
+           return null;
+       }
+       return user;
     }
 
     public async Task<IEnumerable<User>> GetAllAsync()
@@ -27,13 +33,13 @@ public class UserRepository : IUserRepository
         await _context.Users.AddAsync(user);
     }
 
-    public void Update(User item)
+    public void Update(User user)
     {
-        throw new NotImplementedException();
+        _context.Users.Update(user);
     }
 
-    public void Remove(User item)
+    public void Remove(User user)
     {
-        throw new NotImplementedException();
+        _context.Users.Remove(user);
     }
 }

@@ -19,6 +19,27 @@ public class UserControllerTests
     }
 
     [Fact]
+    public async Task GetUser_ReturnsOkResult_WithAUser()
+    {
+        // Arrange
+        var expectedUser = new User { Id = 1, UserName = "TestUser" };
+
+        A.CallTo(() => _unitOfWork.Users.GetByIdAsync(expectedUser.Id)).Returns(expectedUser);
+        // Act
+        var result = await _controller.GetUserByIdAsync(expectedUser.Id);
+        
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<User>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        Assert.Equal(200, okResult.StatusCode);
+        
+        var returnedUser = Assert.IsType<User>(okResult.Value);
+        Assert.Equivalent(expectedUser, returnedUser);
+
+        A.CallTo(() => _unitOfWork.Users.GetByIdAsync(expectedUser.Id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
     public async Task GetAllUsers_ReturnsOkResult_WithListOfUsers()
     {
         // Arrange
@@ -56,5 +77,54 @@ public class UserControllerTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateUser_ReturnsOkResult()
+    {
+        // Arrange
+        var user = new User { Id = 1, UserName = "TestUser" };
+
+        A.CallTo(() => _unitOfWork.Users.Update(user)).DoesNothing();
+        //Act
+        var result = await _controller.UpdateUserAsync(user);
+        
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateUser_ReturnsNotFoundResult_WhenUserNotFound()
+    {
+        // Arrange
+        var user = new User { Id = 1, UserName = "TestUser" };
+
+        A.CallTo(() => _unitOfWork.Users.GetByIdAsync(user.Id))!.Returns((User)null);
+        //Act
+        var result = await _controller.UpdateUserAsync(user);
+        
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(404, notFoundResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task RemoveUser_ReturnsOkResult()
+    {
+        // Arrange
+        var user = new User { Id = 1, UserName = "TestUser" };
+
+        A.CallTo(() => _unitOfWork.Users.GetByIdAsync(user.Id)).Returns(user);
+        A.CallTo(() => _unitOfWork.Users.Remove(user)).DoesNothing();
+        //Act
+        var result = await _controller.RemoveUserAsync(user.Id);
+        
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+
+        A.CallTo(() => _unitOfWork.Users.GetByIdAsync(user.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _unitOfWork.Users.Remove(user)).MustHaveHappenedOnceExactly();
     }
 }
