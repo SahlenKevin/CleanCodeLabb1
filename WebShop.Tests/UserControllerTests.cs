@@ -1,4 +1,6 @@
-﻿namespace WebShopTests;
+﻿using System.Net;
+
+namespace WebShopTests;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using WebShop;
@@ -39,5 +41,20 @@ public class UserControllerTests
         Assert.Equivalent(expectedUsers, returnedProducts);
 
         A.CallTo(() => _unitOfWork.Users.GetAllAsync()).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task AddUser_ReturnsOkResult()
+    {
+        // Arrange
+        var user = new User { Id = 1, UserName = "TestUser" };
+
+        A.CallTo(() => _unitOfWork.Users.AddAsync(user)).DoesNothing();
+        //Act
+        var result = await _controller.AddUserAsync(user);
+        
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
     }
 }
