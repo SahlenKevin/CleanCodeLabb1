@@ -6,6 +6,7 @@ namespace WebShop.Repository;
 public class WebShopDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
+    public DbSet<User> Users { get; set; }
         
     public WebShopDbContext(DbContextOptions<WebShopDbContext> options) : base(options)
     {
@@ -17,6 +18,7 @@ public class WebShopDbContext : DbContext
         // Example: Configure relationships or constraints
 
         modelBuilder.Entity<Product>();
+        modelBuilder.Entity<User>();
 
         //modelBuilder.Entity<OrderItem>()
         //    .HasOne(oi => oi.Order)

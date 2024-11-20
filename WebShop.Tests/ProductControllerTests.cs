@@ -31,7 +31,7 @@ public class ProductControllerTests
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(200, okResult.StatusCode);
         
-        var returnedProduct = Assert.IsAssignableFrom<Product>(okResult.Value);
+        var returnedProduct = Assert.IsType<Product>(okResult.Value);
         Assert.Equivalent(expectedProduct, returnedProduct);
 
         A.CallTo(() => _unitOfWork.Products.GetByIdAsync(expectedProduct.Id)).MustHaveHappenedOnceExactly();
@@ -58,7 +58,7 @@ public class ProductControllerTests
         A.CallTo(() => _unitOfWork.Products.GetAllAsync()).Returns(expectedProducts);
 
         // Act
-        var result =  await _controller.GetProducts();
+        var result =  await _controller.GetProductsAsync();
 
         // Assert 
         var actionResult = Assert.IsType<ActionResult<IEnumerable<Product>>>(result);
@@ -72,34 +72,77 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public void AddProduct_ReturnsOkResult()
+    public async Task AddProduct_ReturnsOkResult()
     {
         // Arrange
         var testProduct = A.Fake<Product>();
         A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).DoesNothing();
 
         // Act
-        var result = _controller.AddProduct(testProduct);
+        var result = await _controller.AddProductAsync(testProduct);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
         A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).MustHaveHappenedOnceExactly();
     }
     
     [Fact]
-    public void AddProduct_ReturnsBadRequestResult()
+    public async Task AddProduct_ReturnsBadRequestResult()
     {
         // Arrange
         Product testProduct = null;
         A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).DoesNothing();
 
         // Act
-        var result = _controller.AddProduct(testProduct);
+        var result = await _controller.AddProductAsync(testProduct);
         
         // Assert
-        var isBadRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-        Assert.Equal(400, isBadRequestResult.StatusCode);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, badRequestResult.StatusCode);
         A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).MustNotHaveHappened();
     }
+
+    [Fact]
+    public async Task UpdateProduct_ReturnsOkResult()
+    {
+        // Arrange 
+        var existingProduct = new Product { Id = 1, Name = "OldName" };
+        var updatedProductName = new Product { Id = 1, Name = "NewName" };
+        A.CallTo(() => _unitOfWork.Products.GetByIdAsync(existingProduct.Id)).Returns(existingProduct);
+        A.CallTo(() => _unitOfWork.Products.Update(existingProduct)).DoesNothing();
+        
+        // Act
+        var result = await _controller.UpdateProductAsync(updatedProductName);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+
+        A.CallTo(() => _unitOfWork.Products.GetByIdAsync(existingProduct.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _unitOfWork.Products.Update(existingProduct)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _unitOfWork.CompleteAsync()).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task RemoveProduct_ReturnsOkResult()
+    {
+        // Arrange
+        var existingProduct = new Product { Id = 1, Name = "TestProduct" };
+        
+        A.CallTo(() => _unitOfWork.Products.GetByIdAsync(existingProduct.Id)).Returns(existingProduct);
+        A.CallTo(() => _unitOfWork.Products.Remove(existingProduct)).DoesNothing();
+
+        // Act
+        var result = await _controller.RemoveProductAsync(existingProduct.Id);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+        
+        A.CallTo(() => _unitOfWork.Products.GetByIdAsync(existingProduct.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _unitOfWork.Products.Remove(existingProduct)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _unitOfWork.CompleteAsync()).MustHaveHappenedOnceExactly();
+    }
+
 }

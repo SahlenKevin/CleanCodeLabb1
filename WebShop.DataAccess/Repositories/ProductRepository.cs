@@ -36,13 +36,13 @@ public class ProductRepository : IProductRepository
         await _context.AddAsync(product);
     }
 
-    public Task UpdateAsync(Product item)
+    public void Update(Product product)
     {
-        throw new NotImplementedException();
+        _context.Products.Update(product);
     }
 
-    public Task RemoveAsync(int id)
+    public void Remove(Product product)
     {
-        throw new NotImplementedException();
+        _context.Products.Remove(product);
     }
 }
