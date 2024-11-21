@@ -8,6 +8,7 @@ namespace WebShop.UnitOfWork
          // Repository för produkter
          IProductRepository Products { get; }
          IUserRepository Users { get; }
+         IOrderRepository Orders { get; }
          Task<int> CompleteAsync();
          // Sparar förändringar (om du använder en databas)
          // Task SaveChangesAsync();

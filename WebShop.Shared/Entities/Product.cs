@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace WebShop
 {
@@ -7,11 +6,9 @@ namespace WebShop
     public class Product
     {
         [Key]
-        public int Id { get; set; } // Unikt ID för produkten
-        [JsonPropertyName("name")]
-        public string Name { get; set; } // Namn på produkten
+        public int Id { get; set; }
+        public string Name { get; set; }
         public double Price { get; set; }
         public int Stock { get; set; }
-
     }
 }

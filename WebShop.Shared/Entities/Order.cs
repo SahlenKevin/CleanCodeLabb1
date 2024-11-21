@@ -11,5 +11,7 @@ public class Order
     [ForeignKey("User")]
     public int UserId { get; set; }
 
-    public ICollection<OrderProduct> Products { get; set; } = [];
+    public List<OrderProduct> Products { get; set; } = [];
+
+    public double Price { get; set; }
 }

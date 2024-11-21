@@ -11,13 +11,17 @@ namespace WebShop.UnitOfWork
         private readonly WebShopDbContext _context;
         public IProductRepository Products { get; set; }
         public IUserRepository Users { get; set; }
-        
+        public IOrderRepository Orders { get; set; }
+
+
         public UnitOfWork(WebShopDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             Products = new ProductRepository(_context);
             Users = new UserRepository(_context);
+            Orders = new OrderRepository(_context);
         }
+
 
         public async Task<int> CompleteAsync()
         {
