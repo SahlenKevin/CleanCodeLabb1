@@ -7,28 +7,36 @@ public class WebShopDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<User> Users { get; set; }
-        
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderProduct> OrderProducts { get; set; }
+
     public WebShopDbContext(DbContextOptions<WebShopDbContext> options) : base(options)
     {
         
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Example: Configure relationships or constraints
+        modelBuilder.Entity<OrderProduct>()
+            .HasOne(op => op.Order)
+            .WithMany(o => o.Products)
+            .HasForeignKey(op => op.OrderId);
 
-        modelBuilder.Entity<Product>();
-        modelBuilder.Entity<User>();
+        modelBuilder.Entity<OrderProduct>()
+            .HasOne(op => op.Product)
+            .WithMany()
+            .HasForeignKey(op => op.ProductId);
 
-        //modelBuilder.Entity<OrderItem>()
-        //    .HasOne(oi => oi.Order)
-        //    .WithMany(o => o.OrderItems)
-        //    .HasForeignKey(oi => oi.OrderId);
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Name);
 
-        //modelBuilder.Entity<OrderItem>()
-        //    .HasOne(oi => oi.Product)
-        //    .WithMany()
-        //    .HasForeignKey(oi => oi.ProductId);
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasColumnType("decimal(18,2)"); 
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.UserName);
+
 
         base.OnModelCreating(modelBuilder);
     }
