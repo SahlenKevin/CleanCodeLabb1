@@ -5,7 +5,6 @@ namespace WebShop.UnitOfWork
     // Gränssnitt för Unit of Work
     public interface IUnitOfWork : IDisposable
     {
-         // Repository för produkter
          IProductRepository Products { get; }
          IUserRepository Users { get; }
          IOrderRepository Orders { get; }

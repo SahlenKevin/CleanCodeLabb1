@@ -18,7 +18,7 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public async Task GetProduct_ReturnsOkResult_WithAProduct()
+    public async void GetProduct_ReturnsOkResult_WithAProduct()
     {
         // Arrange
         var expectedProduct = new Product { Id = 1, Name = "TestProdukt" };
@@ -39,7 +39,7 @@ public class ProductControllerTests
     }
     
     [Fact]
-    public async Task GetProducts_ReturnsOkResult_WithAListOfProducts()
+    public async void GetProducts_ReturnsOkResult_WithAListOfProducts()
     {
         // Arrange
         var expectedProducts = new List<Product>
@@ -73,7 +73,7 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public async Task AddProduct_ReturnsOkResult()
+    public async void AddProduct_ReturnsOkResult()
     {
         // Arrange
         var testProduct = A.Fake<Product>();
@@ -89,7 +89,7 @@ public class ProductControllerTests
     }
     
     [Fact]
-    public async Task AddProduct_ReturnsBadRequestResult()
+    public async void AddProduct_ReturnsBadRequestResult()
     {
         // Arrange
         Product testProduct = null!;
@@ -105,7 +105,7 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public async Task UpdateProduct_ReturnsOkResult()
+    public async void UpdateProduct_ReturnsOkResult()
     {
         // Arrange 
         var existingProduct = new Product { Id = 1, Name = "OldName" };
@@ -126,7 +126,7 @@ public class ProductControllerTests
     }
     
     [Fact]
-    public async Task RemoveProduct_ReturnsOkResult()
+    public async void RemoveProduct_ReturnsOkResult()
     {
         // Arrange
         var existingProduct = new Product { Id = 1, Name = "TestProduct" };

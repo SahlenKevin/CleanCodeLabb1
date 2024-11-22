@@ -2,7 +2,8 @@
 <project version="4">
   <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
     <file url="file://$PROJECT_DIR$/WebShop.Shared/Entities/Product.cs" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/WebShop.Tests/ProductControllerTests.cs" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/WebShop.Tests/ControllerTests/ProductControllerTests.cs" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/WebShop.Tests/ControllerTests/ProductControllerTests.cs" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/WebShop.Tests/UnitOfWorkTests.cs" charset="windows-1252" />
   </component>
 </project>

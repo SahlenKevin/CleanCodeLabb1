@@ -18,7 +18,7 @@ public class OrderControllerTests
     }
 
     [Fact]
-    public async Task GetOrderById_ReturnsOkResult_WithAOrder()
+    public async void GetOrderById_ReturnsOkResult_WithAOrder()
     {
         // Arrange
         var expectedOrder = new Order
@@ -52,7 +52,7 @@ public class OrderControllerTests
     }
 
     [Fact]
-    public async Task GetOrderByUserId_ReturnsOkResult_WithListOfOrder()
+    public async void GetOrderByUserId_ReturnsOkResult_WithListOfOrder()
     {
         // Arrange
         var expectedOrders = new List<Order>
@@ -103,7 +103,7 @@ public class OrderControllerTests
     }
 
     [Fact]
-    public async Task GetAllOrders_ReturnsOkResult_WithAListOfOrder()
+    public async void GetAllOrders_ReturnsOkResult_WithAListOfOrder()
     {
         // Arrange
         var expectedOrders = new List<Order>
@@ -154,7 +154,7 @@ public class OrderControllerTests
     }
 
     [Fact]
-    public async Task AddOrder_GetOkResult()
+    public async void AddOrder_GetOkResult()
     {
         // Arrange
         var testUser = new User { Id = 1, UserName = "TestUser" };

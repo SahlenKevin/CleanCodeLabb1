@@ -1,11 +1,23 @@
+using FakeItEasy;
 using WebShop;
 using WebShop.Notifications;
+using WebShop.Repository;
 using WebShop.UnitOfWork;
 
 namespace WebShopTests
 {
     public class UnitOfWorkTests
     {
+        private readonly WebShopDbContext _context;
+        private readonly UnitOfWork _unitOfWork;
+
+        public UnitOfWorkTests()
+        {
+            _context = A.Fake<WebShopDbContext>();
+            _unitOfWork = new UnitOfWork(_context);
+
+        }
+        
         [Fact]
         public void NotifyProductAdded_CallsObserverUpdate()
         {
