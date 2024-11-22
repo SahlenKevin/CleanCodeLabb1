@@ -15,7 +15,6 @@ public class ProductControllerTests
     {
         _unitOfWork = A.Fake<IUnitOfWork>();
         _controller = new ProductController(_unitOfWork);
-        // Ställ in mock av Products-egenskapen
     }
 
     [Fact]

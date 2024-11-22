@@ -7,19 +7,24 @@ namespace WebShop.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        // Hämta produkter från repository
         private readonly WebShopDbContext _context;
+        
+        private readonly ProductSubject _productSubject;
         public IProductRepository Products { get; set; }
         public IUserRepository Users { get; set; }
         public IOrderRepository Orders { get; set; }
 
 
-        public UnitOfWork(WebShopDbContext context)
+        public UnitOfWork(WebShopDbContext context, IOrderRepository orderRepository,
+            IProductRepository productRepository, IUserRepository userRepository, ProductSubject productSubject)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            Products = new ProductRepository(_context);
-            Users = new UserRepository(_context);
-            Orders = new OrderRepository(_context);
+            Products = productRepository;
+            Users = userRepository;
+            Orders = orderRepository;
+
+            _productSubject = productSubject;
+            _productSubject.Attach(new EmailNotification());
         }
 
 
@@ -30,7 +35,7 @@ namespace WebShop.UnitOfWork
 
         public void NotifyProductAdded(Product product)
         {
-            // _productSubject.Notify(product);
+            _productSubject.Notify(product);
         }
 
         public void Dispose()

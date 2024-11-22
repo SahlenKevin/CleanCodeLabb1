@@ -7,7 +7,7 @@
         {
             // Här skulle du implementera logik för att skicka ett e-postmeddelande
             // För enkelhetens skull skriver vi ut till konsolen
-            // Console.WriteLine($"Email Notification: New product added - {product.Name}");
+            Console.WriteLine($"Email Notification: New product added - {product.Name}");
         }
     }
 }

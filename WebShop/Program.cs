@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebShop.Notifications;
+using WebShop.Repositories;
 using WebShop.Repository;
 using WebShop.UnitOfWork;
 
@@ -8,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IProductRepository>();
+builder.Services.AddScoped<IUserRepository>();
+builder.Services.AddScoped<IOrderRepository>();
 // Registrera Unit of Work i DI-container
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<INotificationObserver, EmailNotification>();
