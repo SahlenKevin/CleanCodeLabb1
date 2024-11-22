@@ -7,17 +7,14 @@ namespace WebShop.Controllers
     [Route("api/[controller]")]
     public class ProductController(IUnitOfWork unitOfWork) : ControllerBase
     {
-        // Endpoint f�r att h�mta alla produkter
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductsAsync()
         {
-            // Beh�ver anv�nda repository via Unit of Work f�r att h�mta produkter
             var products = await unitOfWork.Products.GetAllAsync();
 
             return Ok(products);
         }
 
-        // Endpoint f�r att l�gga till en ny produkt
         [HttpPost]
         public async Task<IActionResult> AddProductAsync([FromBody] Product product)
         {

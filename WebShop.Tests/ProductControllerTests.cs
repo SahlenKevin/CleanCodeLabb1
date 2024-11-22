@@ -92,7 +92,7 @@ public class ProductControllerTests
     public async Task AddProduct_ReturnsBadRequestResult()
     {
         // Arrange
-        Product testProduct = null;
+        Product testProduct = null!;
         A.CallTo(() => _unitOfWork.Products.AddAsync(testProduct)).DoesNothing();
 
         // Act
