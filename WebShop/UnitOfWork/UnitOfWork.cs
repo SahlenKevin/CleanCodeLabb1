@@ -21,8 +21,7 @@ namespace WebShop.UnitOfWork
             Users = new UserRepository(_context);
             Orders = new OrderRepository(_context);
         }
-
-
+        
         public async Task<int> CompleteAsync()
         {
             return await _context.SaveChangesAsync();
