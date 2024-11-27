@@ -1,16 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
+using WebShop.Services;
 using WebShop.UnitOfWork;
 
 namespace WebShop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController(IUnitOfWork unitOfWork) : ControllerBase
+    public class ProductController(IProductService productService) : ControllerBase
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductsAsync()
         {
-            var products = await unitOfWork.Products.GetAllAsync();
+            var products = await productService.GetAllProducts();
 
             return Ok(products);
         }
@@ -18,17 +19,14 @@ namespace WebShop.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProductAsync([FromBody] Product product)
         {
-            if (product == null)
-                return BadRequest("Product is null.");
-
             try
             {
-                await unitOfWork.Products.AddAsync(product);
-
-                // Save changes
-                await unitOfWork.CompleteAsync();
-                unitOfWork.NotifyProductAdded(product);
+                await productService.AddNewProduct(product);
                 return Ok("Product added successfully.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -41,8 +39,12 @@ namespace WebShop.Controllers
         {
             try
             {
-                var product = await unitOfWork.Products.GetByIdAsync(productId);
+                var product = await productService.GetProductById(productId);
                 return Ok(product);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -53,19 +55,19 @@ namespace WebShop.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateProductAsync(Product updatedProduct)
         {
-            var product = await unitOfWork.Products.GetByIdAsync(updatedProduct.Id);
-
-            if (product == null)
-                return BadRequest("Product is null.");
+            if (updatedProduct == null || updatedProduct.Id <= 0)
+            {
+                return BadRequest("Invalid product data.");
+            }
 
             try
             {
-                product.Name = updatedProduct.Name;
-
-                unitOfWork.Products.Update(product);
-                await unitOfWork.CompleteAsync();
-
-                return Ok("Product update successful");
+                await productService.UpdateProduct(updatedProduct);
+                return Ok("Product update successful.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -76,17 +78,14 @@ namespace WebShop.Controllers
         [HttpDelete]
         public async Task<IActionResult> RemoveProductAsync(int productId)
         {
-            var product = await unitOfWork.Products.GetByIdAsync(productId);
-
-            if (product == null)
-                return NotFound("Product not found.");
-
             try
             {
-                unitOfWork.Products.Remove(product);
-                await unitOfWork.CompleteAsync();
-
-                return Ok("Product removed successfully");
+                await productService.RemoveProduct(productId);
+                return Ok("Product removed successfully.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

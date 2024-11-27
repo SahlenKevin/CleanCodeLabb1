@@ -2,6 +2,7 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using WebShop;
 using WebShop.Controllers;
+using WebShop.Services;
 using WebShop.UnitOfWork;
 
 namespace WebShopTests;
@@ -10,11 +11,13 @@ public class ProductControllerTests
 {
     private readonly ProductController _controller;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IProductService _productService;
 
     public ProductControllerTests()
     {
         _unitOfWork = A.Fake<IUnitOfWork>();
-        _controller = new ProductController(_unitOfWork);
+        _productService = A.Fake<IProductService>();
+        _controller = new ProductController(_productService);
     }
 
     [Fact]
