@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Services;
-using WebShop.UnitOfWork;
 
 namespace WebShop.Controllers
 {
@@ -55,11 +54,6 @@ namespace WebShop.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateProductAsync(Product updatedProduct)
         {
-            if (updatedProduct == null || updatedProduct.Id <= 0)
-            {
-                return BadRequest("Invalid product data.");
-            }
-
             try
             {
                 await productService.UpdateProduct(updatedProduct);
