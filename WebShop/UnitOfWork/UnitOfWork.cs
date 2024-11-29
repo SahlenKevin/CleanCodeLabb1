@@ -38,18 +38,3 @@ namespace WebShop.UnitOfWork
         }
     }
 }
-
-
-// private readonly ProductSubject _productSubject;
-//
-// // Konstruktor används för tillfället av Observer pattern
-// public UnitOfWork(ProductSubject productSubject = null)
-// {
-//     Products = null;
-//
-//     // Om inget ProductSubject injiceras, skapa ett nytt
-//     _productSubject = productSubject ?? new ProductSubject();
-//
-//     // Registrera standardobservatörer
-//     _productSubject.Attach(new EmailNotification());
-// }

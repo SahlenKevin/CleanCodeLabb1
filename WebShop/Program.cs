@@ -24,7 +24,6 @@ connectionString = builder.Configuration.GetConnectionString("DefaultConnection"
 #endif
 
 connectionString = builder.Configuration.GetConnectionString("DockerConnection");
-// "DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CleanCodeLabbEtt;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
 
 builder.Services.AddDbContext<WebShopDbContext>(options =>
 {
